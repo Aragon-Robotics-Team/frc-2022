@@ -8,6 +8,10 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 
+import frc.robot.subsystems.Drivetrain;
+import frc.robot.commands.driving.ArcadeDrive;
+import edu.wpi.first.wpilibj.Joystick;
+
 /**
  * This class is where the bulk of the robot should be declared. Since
  * Command-based is a "declarative" paradigm, very little robot logic should
@@ -16,7 +20,14 @@ import edu.wpi.first.wpilibj2.command.Command;
  * commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+  private static final class Config {
+    public static final int kdriveJoystickPort = 4;
+  }
+
   // The robot's subsystems and commands are defined here...
+  private final Drivetrain m_drivetrain = new Drivetrain();
+  private final Joystick m_joystick = new Joystick(Config.kdriveJoystickPort);
+  private final ArcadeDrive m_arcadeDrive = new ArcadeDrive(m_drivetrain, m_joystick);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -50,6 +61,6 @@ public class RobotContainer {
    * @return the command to run in teleop
    */
   public Command getTeleopCommand() {
-    return null;
+    return m_arcadeDrive;
   }
 }
