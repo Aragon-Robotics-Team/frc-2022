@@ -13,16 +13,16 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 public class Drivetrain extends SubsystemBase {
   private static final class Config {
     // placeholders
-    public static final int LEFT_MOTOR_SLAVE = 0;
-    public static final int RIGHT_MOTOR_SLAVE = 0;
-    public static final int LEFT_MOTOR_MASTER = 1;
-    public static final int RIGHT_MOTOR_MASTER = 1;
+    public static final int kLeftMotorSlave = 0;
+    public static final int kRightMotorSlave = 0;
+    public static final int kLeftMotorMaster = 1;
+    public static final int kRightMotorMaster = 1;
   }
 
-  private CANSparkMax m_leftMotorSlave = new CANSparkMax(Config.LEFT_MOTOR_SLAVE, MotorType.kBrushless);
-  private CANSparkMax m_rightMotorSlave = new CANSparkMax(Config.RIGHT_MOTOR_SLAVE, MotorType.kBrushless);
-  private CANSparkMax m_leftMotorMaster = new CANSparkMax(Config.LEFT_MOTOR_MASTER, MotorType.kBrushless);
-  private CANSparkMax m_rightMotorMaster = new CANSparkMax(Config.RIGHT_MOTOR_MASTER, MotorType.kBrushless);
+  private CANSparkMax m_leftMotorSlave = new CANSparkMax(Config.kLeftMotorSlave, MotorType.kBrushless);
+  private CANSparkMax m_rightMotorSlave = new CANSparkMax(Config.kRightMotorSlave, MotorType.kBrushless);
+  private CANSparkMax m_leftMotorMaster = new CANSparkMax(Config.kLeftMotorMaster, MotorType.kBrushless);
+  private CANSparkMax m_rightMotorMaster = new CANSparkMax(Config.kRightMotorMaster, MotorType.kBrushless);
 
   private CANEncoder m_encRight = m_rightMotorMaster.getEncoder();
   private CANEncoder m_encLeft = m_leftMotorMaster.getEncoder();
