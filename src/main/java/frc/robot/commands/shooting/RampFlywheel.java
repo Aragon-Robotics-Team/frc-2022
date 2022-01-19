@@ -58,9 +58,4 @@ public class RampFlywheel extends CommandBase {
 
     return Math.abs(m_flywheel.getRPM() - m_targetRPM) <= 25.0;
   }
-
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
 }
