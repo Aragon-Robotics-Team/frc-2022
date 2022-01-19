@@ -32,6 +32,23 @@ public class Funnel extends SubsystemBase {
     m_leftMotor.setInverted(true);
   }
 
+  public void setMotors (double voltage) {
+    m_leftMotor.setVoltage(voltage);
+    m_rightMotor.setVoltage(voltage);
+  }
+
+  public void setOFf() {
+    setMotors(0);
+  }
+
+  public void setOn() {
+    setMotors(Config.kFunnelSpeed);
+  }
+  
+  public void setReverse() {
+    setMotors(-Config.kFunnelSpeed);
+  }
+  
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
