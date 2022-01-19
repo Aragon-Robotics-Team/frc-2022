@@ -40,12 +40,43 @@ public class Flywheel extends SubsystemBase {
     m_flyMotorSlave.setInverted(true);
 
     m_flyMotorMaster.setNeutralMode(NeutralMode.Coast);
-    m_flyMotor.setNeutralMode(NeutralMode.Coast);
+    m_flyMotorSlave.setNeutralMode(NeutralMode.Coast);
+
+    m_flyMotorSlave.follow(m_flyMotorMaster);
+
+  }
+
+  public void setOff() {
+    
+    //set(0.0);   Issue to look into later
+
+  }
+
+  public double getRPM() {
+
+    return -1.0 * m_flyMotorMaster.getSelectedSensorVelocity() * Config.kGearRatio / Config.kEncoderRes * 60;
+
+  }
+
+  
+  public double getPercent() {
+
+    return m_flyMotorMaster.getMotorOutputPercent();
+
+  } //Finds out value of individual percent as RPM can be increased using pecent values
+
+  public void set(double v) {
+
+    m_flyMotorMaster.set(TalonSRXControlMode.PercentOutput, v);
 
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+
+    super.periodic();
+
+    //Add rest of code later
   }
 }
