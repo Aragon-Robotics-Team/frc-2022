@@ -7,13 +7,13 @@
 
 package frc.robot.commands.shooting;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.shooter.Flywheel;
 
-public class RampFlywheel extends SubsystemBase {
+public class RampFlywheel extends CommandBase {
   /**
    * Creates a new RampFlywheel.
    */
