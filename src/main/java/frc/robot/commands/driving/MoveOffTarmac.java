@@ -32,8 +32,8 @@ public class MoveOffTarmac extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
-    m_drivetrain.resetEncoder();
+    //add a shooting cmd here? worth thinking about
+    m_drivetrain.resetEncoder(); 
 
     m_pid.setSetpoint(Config.kSetpoint);
 
@@ -42,17 +42,21 @@ public class MoveOffTarmac extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
+    double speed = m_pid.calculate(m_drivetrain.position());
+    //woah tank drive
+    //makes the pid robot move :O
+    m_drivetrain.getDrive().tankDrive(speed, speed, false);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_drivetrain.getDrive().stopMotor();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return m_pid.atSetpoint();
   }
 }
