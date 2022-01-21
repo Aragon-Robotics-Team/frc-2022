@@ -36,6 +36,10 @@ public class MoveOffTarmac extends CommandBase {
   @Override
   public void initialize() {
 
+    m_drivetrain.resetEncoder();
+
+    m_pid.setSetpoint(Config.kSetpoint);
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
