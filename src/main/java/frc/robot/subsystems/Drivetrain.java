@@ -27,6 +27,7 @@ public class Drivetrain extends SubsystemBase {
     public static final int kLeftMotorMaster = 2;
     public static final int kRightMotorMaster = 3;
 
+    public static final double kGearRatio = 1.0;
   }
   /*
 
@@ -69,6 +70,8 @@ public class Drivetrain extends SubsystemBase {
     // m_encRight.setPositionConversionFactor(1.0);
   }
 
+
+  //this is unused
   public void stopMotors() {
     m_leftMotorMaster.stopMotor();
     m_rightMotorMaster.stopMotor();
@@ -79,6 +82,16 @@ public class Drivetrain extends SubsystemBase {
     // m_encLeft.setPosition(0);
     m_leftMotorMaster.setSelectedSensorPosition(0.0);
     m_rightMotorMaster.setSelectedSensorPosition(0.0);
+  }
+
+  public double position() {
+    //distance traveled
+    
+    // rEncoder = right encoder
+    //encoders have not yet been defined soooooooooooooo
+
+    //will need another variable here for spins to feet (so we can read it)
+    return m_leftMotorMaster.getSelectedSensorPosition() * Config.kGearRatio;
   }
 
   @Override
