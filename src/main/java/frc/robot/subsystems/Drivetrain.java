@@ -5,6 +5,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -19,12 +20,19 @@ public class Drivetrain extends SubsystemBase {
     public static final int kRightMotorMaster = 3;
 
     public static final double kGearRatio = 1.0;
+    
+
+    public static final int placeOne = 1;
+    public static final int placeTwo = 2;
+
   }
   /*
    * 
    * talons = masters victors = slaves
    * 
    */
+
+  public AHRS m_ahrs = new AHRS();
 
   // private CANSparkMax m_leftMotorSlave = new
   // CANSparkMax(Config.kLeftMotorSlave, MotorType.kBrushless);
@@ -85,10 +93,16 @@ public class Drivetrain extends SubsystemBase {
     return m_leftMotorMaster.getSelectedSensorPosition() * Config.kGearRatio;
   }
 
+
+  public double getRobotAngle(){
+    // fix the cmd name 
+    // note: the double returned may be degrees (may be more than 360 tho)
+    return m_ahrs.getAngle();
+  }
+
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-  }
+    }
 
   public DifferentialDrive getDrive() {
     return m_drive;
