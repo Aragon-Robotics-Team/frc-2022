@@ -9,9 +9,14 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.shooter.Flywheel;
 import frc.robot.commands.driving.ArcadeDrive;
+<<<<<<< HEAD
 import frc.robot.commands.driving.testing.TestPixy;
 import frc.robot.sensors.PixyCamera;
+=======
+import frc.robot.commands.shooting.RampFlywheel;
+>>>>>>> b0d71af52eeab6e0acec136365bf498b48033fdd
 import edu.wpi.first.wpilibj.Joystick;
 
 /**
@@ -24,15 +29,22 @@ import edu.wpi.first.wpilibj.Joystick;
 public class RobotContainer {
   private static final class Config {
     public static final int kdriveJoystickPort = 4;
+   
   }
+
+
 
   // The robot's subsystems and commands are defined here...
   private final Drivetrain m_drivetrain = new Drivetrain();
   private final Joystick m_joystick = new Joystick(Config.kdriveJoystickPort);
   private final ArcadeDrive m_arcadeDrive = new ArcadeDrive(m_drivetrain, m_joystick);
+<<<<<<< HEAD
   private final PixyCamera m_pixy = new PixyCamera();
 
   private final Command m_testPixy = new TestPixy(m_pixy);
+=======
+  private final Flywheel m_Flywheel = new Flywheel();
+>>>>>>> b0d71af52eeab6e0acec136365bf498b48033fdd
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
