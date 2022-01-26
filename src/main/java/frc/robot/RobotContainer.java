@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.shooter.Flywheel;
 import frc.robot.commands.driving.ArcadeDrive;
+import frc.robot.commands.driving.testing.TestPixy;
+import frc.robot.sensors.PixyCamera;
 import frc.robot.commands.shooting.RampFlywheel;
 import edu.wpi.first.wpilibj.Joystick;
 
@@ -33,6 +35,9 @@ public class RobotContainer {
   private final Drivetrain m_drivetrain = new Drivetrain();
   private final Joystick m_joystick = new Joystick(Config.kdriveJoystickPort);
   private final ArcadeDrive m_arcadeDrive = new ArcadeDrive(m_drivetrain, m_joystick);
+  private final PixyCamera m_pixy = new PixyCamera();
+
+  private final Command m_testPixy = new TestPixy(m_pixy);
   private final Flywheel m_Flywheel = new Flywheel();
 
   /**
@@ -58,6 +63,8 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
+    m_pixy.setDefaultCommand(m_testPixy);
+
     return null;
   }
 
