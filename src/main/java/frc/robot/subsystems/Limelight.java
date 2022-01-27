@@ -20,7 +20,7 @@ public class Limelight extends SubsystemBase {
    * Creates a new Limelight.
    */
  public static final class Config {
-   public static final double kPipeline = 0;
+   public static final double kPipeline = 4;
    public static final double kTargetHeight = 8.67;
    public static final double kMountingHeight = 3;
    public static final double kMountingAngle = 30;
@@ -61,6 +61,10 @@ public double getTv() {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    // Add SmartDashboard later
+    //Take lemonlamp values and put them onto SmartDashboard ()
+    SmartDashboard.putNumber("Limelight tv", getTv());
+    SmartDashboard.putNumber("Limelight tx", getTx());
+    SmartDashboard.putNumber("Limelight ty", getTy());
+    SmartDashboard.putNumber("Estimated Lemonlamp Distance", findDistance());
   }
 }
