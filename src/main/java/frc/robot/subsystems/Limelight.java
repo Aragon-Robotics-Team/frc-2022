@@ -13,58 +13,77 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.networktables.NetworkTable;
 
-
-
 public class Limelight extends SubsystemBase {
   /**
    * Creates a new Limelight.
    */
- public static final class Config {
-   public static final double kPipeline = 4;
-   public static final double kTargetHeight = 8.67;
-   public static final double kMountingHeight = 3;
-   public static final double kMountingAngle = 30;
- }
-
- private NetworkTable m_table = NetworkTableInstance.getDefault().getTable("limelight");
- private NetworkTableEntry m_tx = m_table.getEntry("tx");
- private NetworkTableEntry m_ty = m_table.getEntry("ty");
- private NetworkTableEntry m_tv = m_table.getEntry("tv");
-
- public double getTx() {
-   return m_tx.getDouble(0);
-
- }
-
- public double getTy() {
-  return m_ty.getDouble(0);
-  
-}
-
-public double getTv() {
-  return m_tv.getDouble(0);
-  
-}
-
- public double findDistance() {
-
-  if (getTv() == 1.0) {
-    return (Config.kTargetHeight - Config.kMountingHeight) / Math.tan(Math.toRadians(Config.kMountingAngle + getTy()));
+  public static final class Config {
+    public static final double kPipeline = 4;
+    public static final double kTargetHeight = 8.67;
+    public static final double kMountingHeight = 3;
+    public static final double kMountingAngle = 30;
   }
-  else {
-    return 0.0;
+
+  private NetworkTable m_table = NetworkTableInstance.getDefault().getTable("limelight");
+  private NetworkTableEntry m_tx = m_table.getEntry("tx");
+  private NetworkTableEntry m_ty = m_table.getEntry("ty");
+  private NetworkTableEntry m_tv = m_table.getEntry("tv");
+  private NetworkTableEntry m_pipeline = m_table.getEntry("getpipe");
+  private NetworkTableEntry m_setPipeline = m_table.getEntry("pipeline");
+  private NetworkTableEntry m_ledMode = m_table.getEntry("ledMode");
+
+  public Limelight() {
+    SmartDashboard.putBoolean("Limelight/led", true);
   }
-  
- }
-  
+
+  public double getTx() {
+    return m_tx.getDouble(0);
+
+  }
+
+  public double getTy() {
+    return m_ty.getDouble(0);
+
+  }
+
+  public double getTv() {
+    return m_tv.getDouble(0);
+  }
+
+  public double getPipeline() {
+    return m_pipeline.getDouble(0.0);
+  }
+
+  public void setLamp(boolean on) {
+    if (on) {
+      m_ledMode.setNumber(3.0);
+    } else {
+      m_ledMode.setNumber(1.0);
+    }
+  }
+
+  public double findDistance() {
+    if (getTv() == 1.0) {
+      return (Config.kTargetHeight - Config.kMountingHeight)
+          / Math.tan(Math.toRadians(Config.kMountingAngle + getTy()));
+    } else {
+      return 0.0;
+    }
+  }
 
   @Override
   public void periodic() {
+    setLamp(SmartDashboard.getBoolean("Limelight/led", true));
     // This method will be called once per scheduler run
-    //Take lemonlamp values and put them onto SmartDashboard ()
-    SmartDashboard.putNumber("Limelight tv", getTv());
-    SmartDashboard.putNumber("Limelight tx", getTx());
-    SmartDashboard.putNumber("Limelight ty", getTy());
-    SmartDashboard.putNumber("Estimated Lemonlamp Distance", findDistance());
+    // Take lemonlamp values and put them onto SmartDashboard ()
+    SmartDashboard.putNumber("Limelight/tv", getTv());
+    SmartDashboard.putNumber("Limelight/tx", getTx());
+    SmartDashboard.putNumber("Limelight/ty", getTy());
+    double pipeline = getPipeline();
+    if (pipeline != Config.kPipeline) {
+      m_setPipeline.setNumber(Config.kPipeline);
+    }
+    SmartDashboard.putNumber("Limelight/pipeline", pipeline);
+    SmartDashboard.putNumber("Limelight/distance", findDistance());
   }
 }

@@ -18,77 +18,38 @@ public class PixyCamera extends SubsystemBase {
     private final Pixy2 pixy;
     private static final int kPixySSPort = 0;
 
-    private boolean blockFound;
-    private int x, y, width, height;
-    private int fps;
-
-
     public PixyCamera() {
         pixy = Pixy2.createInstance(new SPILink());
-        pixy.setLamp( (byte) 1, (byte) 1);
-        pixy.setLED(0, 255, 255);
+        pixy.init(kPixySSPort); // Initializes the camera and prepares to send/receive data
         // Creates a new Pixy2 camera using SPILink
-		pixy.init(kPixySSPort); // Initializes the camera and prepares to send/receive data
-		pixy.setLamp((byte) 1, (byte) 1); // Turns the LEDs on
+        pixy.setLamp((byte) 1, (byte) 1); // Turns the LEDs on
         pixy.setLED(255, 255, 255); // Sets the RGB LED to purple
     }
 
-
-    private void logPixyError(int errorCode) {
-        System.out.println("[PIXY ERROR] " + errorCode);
-    }
-
     public Block getBiggestBlock() {
-        // Gets the number of "blocks", identified targets, that match signature 1 on the Pixy2,
-		// does not wait for new data if none is available,
-		// and limits the number of returned blocks to 25, for a slight increase in efficiency
-		int blockCount = pixy.getCCC().getBlocks(false, Pixy2CCC.CCC_SIG1, 25);
-		System.out.println("Found " + blockCount + " blocks!"); // Reports number of blocks found
-		if (blockCount <= 0) {
-            System.out.println("No blocks were found.");
-			return null; // If blocks were not found, stop processing
-		}
-		ArrayList<Block> blocks = pixy.getCCC().getBlockCache(); // Gets a list of all blocks found by the Pixy2
-		Block largestBlock = null;
-		for (Block block : blocks) { // Loops through all blocks and finds the widest one
-			if (largestBlock == null) {
-				largestBlock = block;
-			} else if (block.getWidth() > largestBlock.getWidth()) {
+        // Gets the number of "blocks", identified targets, that match signature 1 on
+        // the Pixy2,
+        // does not wait for new data if none is available,
+        // and limits the number of returned blocks to 25, for a slight increase in
+        // efficiency
+        int blockCount = pixy.getCCC().getBlocks(false, Pixy2CCC.CCC_SIG1, 25);
+        if (blockCount <= 0) {
+            return null; // If blocks were not found, stop processing
+        }
+        ArrayList<Block> blocks = pixy.getCCC().getBlockCache(); // Gets a list of all blocks found by the Pixy2
+        Block largestBlock = null;
+        for (Block block : blocks) { // Loops through all blocks and finds the widest one
+            if (largestBlock == null) {
+                largestBlock = block;
+            } else if (block.getWidth() > largestBlock.getWidth()) {
                 largestBlock = block;
             }
 
         }
-            return largestBlock;
-    }
-
-
-    public double getDistance() {
-
-        final double kFocal = (106 * 20) / 9.25;
-
-        double distance = 9.25 * kFocal / getBiggestBlock().getWidth();
-
-        return distance;
-
-
-
+        return largestBlock;
     }
 
     public byte getFPS() {
         return pixy.getFPS();
     }
-
-    public void moveToCargo() {
-
-
-    }
-
-    public enum PixyCam {
-
-        
-    }
-
-
-
 }
-

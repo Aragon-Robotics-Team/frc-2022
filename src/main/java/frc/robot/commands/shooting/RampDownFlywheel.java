@@ -7,7 +7,6 @@
 
 package frc.robot.commands.shooting;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.shooter.Flywheel;
 
@@ -16,23 +15,19 @@ public class RampDownFlywheel extends CommandBase {
    * Creates a new RampDownFlywheel.
    */
   public static final class Config {
-
-    public static final double kP = 2.0e-5; 
-    // kP checks how close it is to value at small intervals
-
+    public static final double kP = 2.0e-5;
   }
-    
+
   private final Flywheel m_flywheel;
   private double m_targetRPM;
 
   public RampDownFlywheel(Flywheel flywheel) {
 
-      m_flywheel = flywheel;
+    m_flywheel = flywheel;
 
-      addRequirements(flywheel);
-      // Use addRequirements() here to declare subsystem dependencies.
-    }
-  
+    addRequirements(flywheel);
+    // Use addRequirements() here to declare subsystem dependencies.
+  }
 
   // Called when the command is initially scheduled.
   @Override
@@ -56,7 +51,7 @@ public class RampDownFlywheel extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    
+
     return Math.abs(m_flywheel.getRPM() - m_targetRPM) <= 100.0;
 
   }

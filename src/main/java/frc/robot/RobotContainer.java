@@ -4,16 +4,20 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.shooter.Flywheel;
+import frc.robot.commands.TurnTowardCargo;
 import frc.robot.commands.driving.ArcadeDrive;
-import frc.robot.commands.driving.testing.TestPixy;
+import frc.robot.commands.driving.DiffDriveIdle;
+import frc.robot.commands.driving.MoveOffTarmac;
 import frc.robot.sensors.PixyCamera;
-import frc.robot.commands.shooting.RampFlywheel;
 import edu.wpi.first.wpilibj.Joystick;
 
 /**
@@ -26,19 +30,24 @@ import edu.wpi.first.wpilibj.Joystick;
 public class RobotContainer {
   private static final class Config {
     public static final int kdriveJoystickPort = 4;
-   
+
   }
-
-
 
   // The robot's subsystems and commands are defined here...
   private final Drivetrain m_drivetrain = new Drivetrain();
-  private final Joystick m_joystick = new Joystick(Config.kdriveJoystickPort);
-  private final ArcadeDrive m_arcadeDrive = new ArcadeDrive(m_drivetrain, m_joystick);
+  private final Limelight m_limelight = new Limelight();
+  private final Flywheel m_Flywheel = new Flywheel();
   private final PixyCamera m_pixy = new PixyCamera();
 
-  private final Command m_testPixy = new TestPixy(m_pixy);
-  private final Flywheel m_Flywheel = new Flywheel();
+  private final Joystick m_joystick = new Joystick(Config.kdriveJoystickPort);
+
+  private final JoystickButton m_aButton = new JoystickButton(m_joystick, 2);
+
+  // private final Command m_testPixy = new TestPixy(m_pixy);
+  private final ArcadeDrive m_arcadeDrive = new ArcadeDrive(m_drivetrain, m_joystick);
+  private final Command m_tarmac = new MoveOffTarmac(m_drivetrain);
+  private final Command m_diffIdle = new DiffDriveIdle(m_drivetrain);
+  private final Command m_turnCargo = new TurnTowardCargo(m_drivetrain, m_pixy, m_aButton);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -63,7 +72,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    m_pixy.setDefaultCommand(m_testPixy);
+    m_drivetrain.setDefaultCommand(m_diffIdle);
 
     return null;
   }
@@ -74,6 +83,10 @@ public class RobotContainer {
    * @return the command to run in teleop
    */
   public Command getTeleopCommand() {
-    return m_arcadeDrive;
+    m_drivetrain.resetEncoder();
+    m_drivetrain.setIdleMode(NeutralMode.Coast);
+    m_drivetrain.setDefaultCommand(m_arcadeDrive);
+
+    return m_turnCargo;
   }
 }
