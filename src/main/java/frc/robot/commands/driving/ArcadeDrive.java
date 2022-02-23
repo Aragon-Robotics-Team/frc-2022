@@ -4,6 +4,8 @@
 
 package frc.robot.commands.driving;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
@@ -31,6 +33,7 @@ public class ArcadeDrive extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    m_drivetrain.setIdleMode(NeutralMode.Coast);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

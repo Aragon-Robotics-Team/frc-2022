@@ -6,21 +6,21 @@ package frc.robot.sensors;
 
 import java.util.ArrayList;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import io.github.pseudoresonance.pixy2api.Pixy2;
 import io.github.pseudoresonance.pixy2api.Pixy2CCC;
 import io.github.pseudoresonance.pixy2api.Pixy2CCC.Block;
-import io.github.pseudoresonance.pixy2api.links.SPILink;
+import io.github.pseudoresonance.pixy2api.links.I2CLink;
 
 /** Add your docs here. */
 public class PixyCamera extends SubsystemBase {
 
     private final Pixy2 pixy;
-    private static final int kPixySSPort = 0;
 
     public PixyCamera() {
-        pixy = Pixy2.createInstance(new SPILink());
-        pixy.init(kPixySSPort); // Initializes the camera and prepares to send/receive data
+        pixy = Pixy2.createInstance(new I2CLink());
+        pixy.init(); // Initializes the camera and prepares to send/receive data
         // Creates a new Pixy2 camera using SPILink
         pixy.setLamp((byte) 1, (byte) 1); // Turns the LEDs on
         pixy.setLED(255, 255, 255); // Sets the RGB LED to purple
@@ -51,5 +51,13 @@ public class PixyCamera extends SubsystemBase {
 
     public byte getFPS() {
         return pixy.getFPS();
+    }
+
+    public void logBlockInfo(Block block) {
+        SmartDashboard.putBoolean("Pixy/found", true);
+        SmartDashboard.putNumber("Pixy/x", (double) block.getX());
+        SmartDashboard.putNumber("Pixy/y", (double) block.getY());
+        SmartDashboard.putNumber("Pixy/width", (double) block.getWidth());
+        SmartDashboard.putNumber("Pixy/height", (double) block.getHeight());
     }
 }

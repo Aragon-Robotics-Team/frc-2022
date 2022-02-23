@@ -2,22 +2,19 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.driving;
-
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpiutil.math.MathUtil;
-import frc.robot.subsystems.Drivetrain;
+package frc.robot.commands.shooting;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpiutil.math.MathUtil;
+import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Limelight;
 
-public class MoveOffTarmac extends CommandBase {
+public class MoveTowardTape extends CommandBase {
   private static final class Config {
-    // test later
-    public static final double kSetpoint = 5;
-
     public static final double kP = 0.2;
     public static final double kI = 0.0;
     public static final double kD = 0.0;
@@ -25,27 +22,25 @@ public class MoveOffTarmac extends CommandBase {
     public static final double kTicksPerFeet = 5300;
   }
 
-  /** Creates a new MoveOffTarmac. */
-  private Drivetrain m_drivetrain;
+  private final Drivetrain m_drivetrain;
+  private final Limelight m_limelight;
   private final PIDController m_pid = new PIDController(Config.kP, Config.kI, Config.kD);
 
-  public MoveOffTarmac(Drivetrain drivetrain) {
-    // Use addRequirements() here to declare subsystem dependencies.
+  /** Creates a new MoveTowardTape. */
+  public MoveTowardTape(Drivetrain drivetrain, Limelight limelight) {
     m_drivetrain = drivetrain;
+    m_limelight = limelight;
 
-    addRequirements(drivetrain);
-
-    SmartDashboard.putNumber("PID/speed", 0.0);
+    addRequirements(drivetrain, limelight);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    // add a shooting cmd here? worth thinking about
     m_drivetrain.resetEncoder();
 
-    m_pid.setSetpoint(Config.kSetpoint);
-    m_pid.setTolerance(1.0 / 12.0);
+    m_pid.setSetpoint(m_limelight.findDistance());
+    m_pid.setTolerance(0.5 / 12.0);
 
     m_drivetrain.setIdleMode(NeutralMode.Brake);
   }

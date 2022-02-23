@@ -47,7 +47,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public double position() {
-    return m_leftMotorMaster.getSelectedSensorPosition();
+    return -m_leftMotorMaster.getSelectedSensorPosition();
   }
 
   public void setIdleMode(NeutralMode n) {

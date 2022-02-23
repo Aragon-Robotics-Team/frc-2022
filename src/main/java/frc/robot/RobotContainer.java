@@ -7,18 +7,20 @@ package frc.robot;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Limelight;
-import frc.robot.subsystems.shooter.Flywheel;
-import frc.robot.commands.TurnTowardCargo;
 import frc.robot.commands.driving.ArcadeDrive;
 import frc.robot.commands.driving.DiffDriveIdle;
-import frc.robot.commands.driving.MoveOffTarmac;
+import frc.robot.commands.driving.MoveWithPID;
+import frc.robot.commands.driving.TurnTowardCargo;
+import frc.robot.commands.shooting.MoveTowardTape;
+import frc.robot.sensors.Gyroscope;
 import frc.robot.sensors.PixyCamera;
-import edu.wpi.first.wpilibj.Joystick;
+import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.shooter.Latch;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -31,23 +33,28 @@ public class RobotContainer {
   private static final class Config {
     public static final int kdriveJoystickPort = 4;
 
+    public static final double kTarmacSetpoint = 5.0;
   }
 
   // The robot's subsystems and commands are defined here...
   private final Drivetrain m_drivetrain = new Drivetrain();
   private final Limelight m_limelight = new Limelight();
-  private final Flywheel m_Flywheel = new Flywheel();
   private final PixyCamera m_pixy = new PixyCamera();
+  private final Gyroscope m_gyro = new Gyroscope();
+  private final Latch m_latch = new Latch();
 
   private final Joystick m_joystick = new Joystick(Config.kdriveJoystickPort);
 
   private final JoystickButton m_aButton = new JoystickButton(m_joystick, 2);
+  private final JoystickButton m_xButton = new JoystickButton(m_joystick, 1);
+  private final JoystickButton m_rtButton = new JoystickButton(m_joystick, 8);
 
   // private final Command m_testPixy = new TestPixy(m_pixy);
-  private final ArcadeDrive m_arcadeDrive = new ArcadeDrive(m_drivetrain, m_joystick);
-  private final Command m_tarmac = new MoveOffTarmac(m_drivetrain);
+  private final Command m_arcadeDrive = new ArcadeDrive(m_drivetrain, m_joystick);
+  private final Command m_tarmac = new MoveWithPID(m_drivetrain, Config.kTarmacSetpoint);
   private final Command m_diffIdle = new DiffDriveIdle(m_drivetrain);
-  private final Command m_turnCargo = new TurnTowardCargo(m_drivetrain, m_pixy, m_aButton);
+  private final Command m_hub = new MoveTowardTape(m_drivetrain, m_limelight);
+  private final Command m_cargo = new TurnTowardCargo(m_drivetrain, m_pixy, m_rtButton);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -55,6 +62,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+    m_gyro.reset();
   }
 
   /**
@@ -64,6 +72,8 @@ public class RobotContainer {
    * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    m_xButton.whenPressed(m_hub);
+    m_aButton.whenPressed(m_cargo);
   }
 
   /**
@@ -74,7 +84,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     m_drivetrain.setDefaultCommand(m_diffIdle);
 
-    return null;
+    return m_tarmac;
   }
 
   /**
@@ -83,10 +93,11 @@ public class RobotContainer {
    * @return the command to run in teleop
    */
   public Command getTeleopCommand() {
+    m_gyro.reset();
     m_drivetrain.resetEncoder();
     m_drivetrain.setIdleMode(NeutralMode.Coast);
     m_drivetrain.setDefaultCommand(m_arcadeDrive);
 
-    return m_turnCargo;
+    return null;
   }
 }

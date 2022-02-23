@@ -7,11 +7,11 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Limelight extends SubsystemBase {
   /**
@@ -19,9 +19,9 @@ public class Limelight extends SubsystemBase {
    */
   public static final class Config {
     public static final double kPipeline = 4;
-    public static final double kTargetHeight = 8.67;
-    public static final double kMountingHeight = 3;
-    public static final double kMountingAngle = 30;
+    public static final double kTargetHeight = 3.28;
+    public static final double kMountingHeight = 9.0 / 12.0;
+    public static final double kMountingAngle = 0;
   }
 
   private NetworkTable m_table = NetworkTableInstance.getDefault().getTable("limelight");
