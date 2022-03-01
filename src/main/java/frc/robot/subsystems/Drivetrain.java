@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Drivetrain extends SubsystemBase {
@@ -15,6 +16,9 @@ public class Drivetrain extends SubsystemBase {
     public static final int kRightMotorSecondary = 0;
     public static final int kLeftMotorPrimary = 0;
     public static final int kLeftMotorSecondary = 0;
+
+    public static final double kWheelDiameter = 6;
+    public static final double kTicksPerRotation = 4096;
   }
 
   private WPI_TalonFX m_rightMotorPrimary = new WPI_TalonFX(Config.kRightMotorPrimary);
@@ -37,8 +41,21 @@ public class Drivetrain extends SubsystemBase {
     return m_drive;
   }
 
+  /**
+   * @return Distance travelled in feet.
+   */
+  public double getDistance() {
+    return (m_rightMotorPrimary.getSelectedSensorPosition() * Config.kWheelDiameter * Math.PI)
+        / Config.kTicksPerRotation;
+  }
+
+  public void resetEncoder() {
+    m_rightMotorPrimary.setSelectedSensorPosition(0.0);
+  }
+
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Drivetrain/encoder", m_rightMotorPrimary.getSelectedSensorPosition());
+    SmartDashboard.putNumber("Drivetrain/distance", getDistance());
   }
 }
