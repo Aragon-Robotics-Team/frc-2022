@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -51,6 +52,13 @@ public class Drivetrain extends SubsystemBase {
 
   public void resetEncoder() {
     m_rightMotorPrimary.setSelectedSensorPosition(0.0);
+  }
+
+  public void setIdleMode(NeutralMode n) {
+    m_rightMotorPrimary.setNeutralMode(n);
+    m_rightMotorSecondary.setNeutralMode(n);
+    m_leftMotorPrimary.setNeutralMode(n);
+    m_leftMotorSecondary.setNeutralMode(n);
   }
 
   @Override
