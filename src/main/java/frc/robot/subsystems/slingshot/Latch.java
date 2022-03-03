@@ -4,14 +4,31 @@
 
 package frc.robot.subsystems.slingshot;
 
+import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Latch extends SubsystemBase {
+  public static final class Config {
+    public static final int kPWMPort = 0;
+  }
+
+  private Servo m_servo = new Servo(Config.kPWMPort);
+
   /** Creates a new Latch. */
-  public Latch() {}
+  public Latch() {
+  }
+
+  public void openLatch() {
+    m_servo.set(0.0);
+  }
+
+  public void closeLatch() {
+    m_servo.set(1.0);
+  }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Latch/servoValue", m_servo.getPosition());
   }
 }
