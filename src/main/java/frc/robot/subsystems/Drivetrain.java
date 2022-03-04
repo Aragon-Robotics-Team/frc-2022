@@ -13,13 +13,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Drivetrain extends SubsystemBase {
   public static final class Config {
-    public static final int kRightMotorPrimary = 0;
-    public static final int kRightMotorSecondary = 0;
-    public static final int kLeftMotorPrimary = 0;
-    public static final int kLeftMotorSecondary = 0;
+    public static final int kRightMotorPrimary = 1;
+    public static final int kRightMotorSecondary = 2;
+    public static final int kLeftMotorPrimary = 3;
+    public static final int kLeftMotorSecondary = 4;
 
     public static final double kWheelDiameter = 6;
-    public static final double kTicksPerRotation = 4096;
+    public static final double kTicksPerRotation = 2048;
+    public static final double kGearRatio = 9.56;
   }
 
   private WPI_TalonFX m_rightMotorPrimary = new WPI_TalonFX(Config.kRightMotorPrimary);
@@ -34,6 +35,8 @@ public class Drivetrain extends SubsystemBase {
     m_rightMotorSecondary.follow(m_rightMotorPrimary);
     m_leftMotorSecondary.follow(m_leftMotorPrimary);
 
+    m_rightMotorPrimary.setInverted(true);
+    m_rightMotorSecondary.setInverted(true);
     m_leftMotorPrimary.setInverted(true);
     m_leftMotorSecondary.setInverted(true);
   }
@@ -47,11 +50,15 @@ public class Drivetrain extends SubsystemBase {
    */
   public double getDistance() {
     return (m_rightMotorPrimary.getSelectedSensorPosition() * Config.kWheelDiameter * Math.PI)
-        / Config.kTicksPerRotation;
+        / (Config.kTicksPerRotation * Config.kGearRatio);
   }
 
   public void resetEncoder() {
     m_rightMotorPrimary.setSelectedSensorPosition(0.0);
+  }
+
+  public void test(double v) {
+    m_leftMotorPrimary.set(v);
   }
 
   public void setIdleMode(NeutralMode n) {
@@ -65,5 +72,6 @@ public class Drivetrain extends SubsystemBase {
   public void periodic() {
     SmartDashboard.putNumber("Drivetrain/encoder", m_rightMotorPrimary.getSelectedSensorPosition());
     SmartDashboard.putNumber("Drivetrain/distance", getDistance());
+    SmartDashboard.putNumber("Drivetrain/velocity", m_rightMotorPrimary.getSelectedSensorVelocity());
   }
 }

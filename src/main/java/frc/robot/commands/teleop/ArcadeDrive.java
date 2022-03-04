@@ -36,8 +36,14 @@ public class ArcadeDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double speed = m_joystick.getRawAxis(Config.kLeftStickY) * Config.kSpeedMult;
-    double turn = m_joystick.getRawAxis(Config.kRightStickX) * Config.kTurnMult;
+    double speed = -m_joystick.getRawAxis(Config.kLeftStickY) * Config.kSpeedMult;
+    double turn = -m_joystick.getRawAxis(Config.kRightStickX) * Config.kTurnMult;
+
+    // if (m_joystick.getRawButton(1)) {
+    // m_drivetrain.test(speed * -1.0);
+    // } else {
+    // m_drivetrain.test(0.0);
+    // }
 
     m_drivetrain.getDrive().arcadeDrive(speed, turn);
   }
@@ -45,7 +51,8 @@ public class ArcadeDrive extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_drivetrain.getDrive().stopMotor();
+    // m_drivetrain.getDrive().stopMotor();
+    m_drivetrain.test(0.0);
   }
 
   // Returns true when the command should end.
