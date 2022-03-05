@@ -18,8 +18,8 @@ public class Drivetrain extends SubsystemBase {
     public static final int kLeftMotorPrimary = 3;
     public static final int kLeftMotorSecondary = 4;
 
-    public static final double kWheelDiameter = 6;
-    public static final double kTicksPerRotation = 2048;
+    public static final double kWheelDiameter = 0.5;
+    public static final double kTicksPerRotation = 2048.0;
     public static final double kGearRatio = 9.56;
   }
 
