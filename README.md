@@ -4,7 +4,7 @@
 
 ### Teleop
 
-- [ ] Arcade drive // Untested
+- [ ] Arcade drive
 - [ ] Move Arms up
 - [ ] Retract Arms
 - [ ] Reset Arms

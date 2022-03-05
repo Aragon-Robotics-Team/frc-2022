@@ -13,11 +13,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Bowl extends SubsystemBase {
   public static final class Config {
-    public static final int kMotorPort = 0;
+    public static final int kRightMotorPort = 0;
+    public static final int kLeftMotorPort = 0;
   }
 
-  private CANSparkMax m_motor = new CANSparkMax(Config.kMotorPort, MotorType.kBrushless);
-  private CANEncoder m_encoder = m_motor.getEncoder();
+  private CANSparkMax m_motorRight = new CANSparkMax(Config.kRightMotorPort, MotorType.kBrushless);
+  private CANSparkMax m_motorLeft = new CANSparkMax(Config.kLeftMotorPort, MotorType.kBrushless);
+  private CANEncoder m_encoder = m_motorRight.getEncoder();
 
   /** Creates a new Bowl. */
   public Bowl() {
@@ -25,7 +27,8 @@ public class Bowl extends SubsystemBase {
   }
 
   public void set(double speed) {
-    m_motor.set(speed);
+    m_motorRight.set(speed);
+    m_motorLeft.set(speed);
   }
 
   public double getEncoderValue() {
