@@ -39,6 +39,8 @@ public class Drivetrain extends SubsystemBase {
     m_rightMotorSecondary.setInverted(true);
     m_leftMotorPrimary.setInverted(true);
     m_leftMotorSecondary.setInverted(true);
+
+    SmartDashboard.putBoolean("Drivetrain/rightSideInverted", m_drive.isRightSideInverted());
   }
 
   public DifferentialDrive getDrive() {
@@ -57,8 +59,12 @@ public class Drivetrain extends SubsystemBase {
     m_rightMotorPrimary.setSelectedSensorPosition(0.0);
   }
 
-  public void test(double v) {
-    m_leftMotorPrimary.set(v);
+  public void enableDeadband() {
+    m_drive.setDeadband(DifferentialDrive.kDefaultDeadband);
+  }
+
+  public void disableDeadband() {
+    m_drive.setDeadband(0.0);
   }
 
   public void setIdleMode(NeutralMode n) {
@@ -70,8 +76,10 @@ public class Drivetrain extends SubsystemBase {
 
   @Override
   public void periodic() {
+    SmartDashboard.putData(m_drive);
     SmartDashboard.putNumber("Drivetrain/encoder", m_rightMotorPrimary.getSelectedSensorPosition());
     SmartDashboard.putNumber("Drivetrain/distance", getDistance());
-    SmartDashboard.putNumber("Drivetrain/velocity", m_rightMotorPrimary.getSelectedSensorVelocity());
+    SmartDashboard.putNumber("Drivetrain/rightVelocity", m_rightMotorPrimary.getSelectedSensorVelocity());
+    SmartDashboard.putNumber("Drivetrain/leftVelocity", m_leftMotorPrimary.getSelectedSensorVelocity());
   }
 }

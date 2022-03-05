@@ -5,6 +5,7 @@
 package frc.robot.commands.teleop;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
 
@@ -39,20 +40,14 @@ public class ArcadeDrive extends CommandBase {
     double speed = -m_joystick.getRawAxis(Config.kLeftStickY) * Config.kSpeedMult;
     double turn = -m_joystick.getRawAxis(Config.kRightStickX) * Config.kTurnMult;
 
-    // if (m_joystick.getRawButton(1)) {
-    // m_drivetrain.test(speed * -1.0);
-    // } else {
-    // m_drivetrain.test(0.0);
-    // }
-
     m_drivetrain.getDrive().arcadeDrive(speed, turn);
+    SmartDashboard.putNumber("Drivetrain/arcadeDriveSpeed", speed);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    // m_drivetrain.getDrive().stopMotor();
-    m_drivetrain.test(0.0);
+    m_drivetrain.getDrive().stopMotor();
   }
 
   // Returns true when the command should end.
