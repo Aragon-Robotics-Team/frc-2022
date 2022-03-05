@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.slingshot.Bowl;
 
 public class PullSlingshot extends CommandBase {
-  public static final class Config {
+  private static final class Config {
     public static final double kTicks = 0;
     public static final double kMinSpeed = 0.25;
     public static final double kMaxSpeed = 0.25;

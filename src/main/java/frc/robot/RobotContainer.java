@@ -19,7 +19,7 @@ import frc.robot.subsystems.Drivetrain;
  * commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  public static final class Config {
+  private static final class Config {
     public static final int kDriveJoystickPort = 4;
   }
 

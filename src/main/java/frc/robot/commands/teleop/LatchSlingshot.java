@@ -9,7 +9,7 @@ import frc.robot.subsystems.slingshot.Bowl;
 import frc.robot.subsystems.slingshot.Latch;
 
 public class LatchSlingshot extends CommandBase {
-  public static final class Config {
+  private static final class Config {
     public static final double kTicks = 0;
     public static final double kSpeed = 0.25;
   }

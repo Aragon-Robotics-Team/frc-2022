@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Bowl extends SubsystemBase {
-  public static final class Config {
+  private static final class Config {
     public static final int kRightMotorPort = 0;
     public static final int kLeftMotorPort = 0;
   }

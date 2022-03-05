@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Drivetrain extends SubsystemBase {
-  public static final class Config {
+  private static final class Config {
     public static final int kRightMotorPrimary = 1;
     public static final int kRightMotorSecondary = 2;
     public static final int kLeftMotorPrimary = 3;
@@ -76,7 +76,7 @@ public class Drivetrain extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putData(m_drive);
+    SmartDashboard.putData("Drivetrain/DifferentialDrive", m_drive);
     SmartDashboard.putNumber("Drivetrain/encoder", m_rightMotorPrimary.getSelectedSensorPosition());
     SmartDashboard.putNumber("Drivetrain/distance", getDistance());
     SmartDashboard.putNumber("Drivetrain/rightVelocity", m_rightMotorPrimary.getSelectedSensorVelocity());
