@@ -6,26 +6,33 @@ package frc.robot.subsystems.slingshot;
 
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Bowl extends SubsystemBase {
-  public static final class Config {
-    public static final int kMotorPort = 0;
+  private static final class Config {
+    public static final int kRightMotorPort = 0;
+    public static final int kLeftMotorPort = 0;
   }
 
-  private CANSparkMax m_motor = new CANSparkMax(Config.kMotorPort, MotorType.kBrushless);
-  private CANEncoder m_encoder = m_motor.getEncoder();
+  private CANSparkMax m_motorRight = new CANSparkMax(Config.kRightMotorPort, MotorType.kBrushless);
+  private CANSparkMax m_motorLeft = new CANSparkMax(Config.kLeftMotorPort, MotorType.kBrushless);
+  private CANEncoder m_encoder = m_motorRight.getEncoder();
 
   /** Creates a new Bowl. */
   public Bowl() {
+    m_motorRight.setIdleMode(IdleMode.kBrake);
+    m_motorLeft.setIdleMode(IdleMode.kBrake);
+
     m_encoder.setPositionConversionFactor(1.0);
   }
 
   public void set(double speed) {
-    m_motor.set(speed);
+    m_motorRight.set(speed);
+    m_motorLeft.set(speed);
   }
 
   public double getEncoderValue() {

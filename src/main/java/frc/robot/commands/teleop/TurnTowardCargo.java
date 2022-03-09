@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.commands.teleop;
+
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
@@ -32,15 +33,15 @@ public class TurnTowardCargo extends CommandBase {
 
   /** Creates a new TurnToCargo. */
   public TurnTowardCargo(Drivetrain drive, Pixy pixy, JoystickButton button) {
-      m_drive = drive;
-      m_pixy = pixy;
-      m_button = button;
-  
-      addRequirements(drive, pixy);
-  
-      m_pid = new PIDController(Config.kP, Config.kI, Config.kD);
-      m_pid.setTolerance(Config.kCenterBound);
-      m_pid.setSetpoint(Config.kCenter);
+    m_drive = drive;
+    m_pixy = pixy;
+    m_button = button;
+
+    addRequirements(drive, pixy);
+
+    m_pid = new PIDController(Config.kP, Config.kI, Config.kD);
+    m_pid.setTolerance(Config.kCenterBound);
+    m_pid.setSetpoint(Config.kCenter);
   }
 
   // Called when the command is initially scheduled.
@@ -83,6 +84,6 @@ public class TurnTowardCargo extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-     return m_pid.atSetpoint();
+    return m_pid.atSetpoint() || m_button.get();
   }
 }

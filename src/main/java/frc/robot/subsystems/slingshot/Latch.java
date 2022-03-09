@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Latch extends SubsystemBase {
-  public static final class Config {
+  private static final class Config {
     public static final int kPWMPort = 0;
   }
 
