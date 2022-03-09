@@ -21,9 +21,8 @@ public class Pixy extends SubsystemBase {
   public Pixy() {
     pixy = Pixy2.createInstance(new I2CLink());
     pixy.init(); // Initializes the camera and prepares to send/receive data
-    // Creates a new Pixy2 camera using SPILink
     pixy.setLamp((byte) 1, (byte) 1); // Turns the LEDs on
-    pixy.setLED(255, 255, 255); // Sets the RGB LED to purple
+    pixy.setLED(255, 255, 255);
   }
 
   public Block getBiggestBlock() {
