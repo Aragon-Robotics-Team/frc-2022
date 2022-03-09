@@ -7,8 +7,25 @@ package frc.robot.subsystems.intake;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Rollers extends SubsystemBase {
+  public static final class Config {
+    public static final int kRollerMotor = 0;
+    public static final double kVoltsFull = 12.0;
+  }
+
+  private CANSparkMax m_motor = new CANSparkMax(Config.kRollerMotor, MotorType.kBrushless);
+
   /** Creates a new Rollers. */
   public Rollers() {
+
+    m_motor.setIdleMode(IdleMode.kCoast);
+  }
+
+  public void setOn() {
+    m_motor.setVoltage(Config.kVoltsFull);
+  }
+
+  public void setOff() {
+    m_motor.setVoltage(0);
   }
 
   @Override
