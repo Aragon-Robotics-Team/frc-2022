@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Drivetrain extends SubsystemBase {
@@ -40,7 +41,7 @@ public class Drivetrain extends SubsystemBase {
     m_leftMotorPrimary.setInverted(true);
     m_leftMotorSecondary.setInverted(true);
 
-    SmartDashboard.putBoolean("Drivetrain/rightSideInverted", m_drive.isRightSideInverted());
+    SmartDashboard.putData("Reset Encoder", new InstantCommand(this::resetEncoder));
   }
 
   public DifferentialDrive getDrive() {
@@ -79,7 +80,5 @@ public class Drivetrain extends SubsystemBase {
     SmartDashboard.putData("Drivetrain/DifferentialDrive", m_drive);
     SmartDashboard.putNumber("Drivetrain/encoder", m_rightMotorPrimary.getSelectedSensorPosition());
     SmartDashboard.putNumber("Drivetrain/distance", getDistance());
-    SmartDashboard.putNumber("Drivetrain/rightVelocity", m_rightMotorPrimary.getSelectedSensorVelocity());
-    SmartDashboard.putNumber("Drivetrain/leftVelocity", m_leftMotorPrimary.getSelectedSensorVelocity());
   }
 }

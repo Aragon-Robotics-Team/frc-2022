@@ -5,6 +5,7 @@
 package frc.robot.commands.auto;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpiutil.math.MathUtil;
 import frc.robot.subsystems.Drivetrain;
@@ -43,6 +44,7 @@ public class MoveWithPID extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    SmartDashboard.putData("PID/driveController", m_pid);
     double speed = MathUtil.clamp(m_pid.calculate(m_drivetrain.getDistance()), -1.0, 1.0);
     m_drivetrain.getDrive().tankDrive(speed, speed, false);
   }
