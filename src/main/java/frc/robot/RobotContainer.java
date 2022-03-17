@@ -4,10 +4,14 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.auto.MoveWithPID;
 import frc.robot.commands.teleop.ArcadeDrive;
 import frc.robot.subsystems.Drivetrain;
 
@@ -21,15 +25,26 @@ import frc.robot.subsystems.Drivetrain;
 public class RobotContainer {
   private static final class Config {
     public static final int kDriveJoystickPort = 4;
+    public static final int kHighGearButton = 1;
+    public static final int kLowGearButton = 2;
+    public static final int kPCMId = 1;
+
+    public static final double kAutoPIDSetpoint = 5.0;
   }
 
   // Joysticks & Joystick Buttons
   private Joystick m_driveJoystick = new Joystick(Config.kDriveJoystickPort);
 
+  private JoystickButton m_highGear = new JoystickButton(m_driveJoystick, Config.kHighGearButton);
+  private JoystickButton m_lowGear = new JoystickButton(m_driveJoystick, Config.kLowGearButton);
+
   // The robot's subsystems and commands are defined here...
   private Drivetrain m_drivetrain = new Drivetrain();
 
   private ArcadeDrive m_arcadeDrive = new ArcadeDrive(m_drivetrain, m_driveJoystick);
+  private MoveWithPID m_tarmac = new MoveWithPID(m_drivetrain, Config.kAutoPIDSetpoint);
+
+  private Compressor m_compressor = new Compressor(Config.kPCMId);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -46,6 +61,16 @@ public class RobotContainer {
    * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    m_highGear.whenPressed(m_drivetrain.getHighGear());
+    m_lowGear.whenPressed(m_drivetrain.getLowGear());
+  }
+
+  public Command getInitCommand() {
+    return new InstantCommand(() -> m_compressor.start());
+  }
+
+  public Command getDisabledCommand() {
+    return new InstantCommand(() -> m_compressor.stop());
   }
 
   /**
@@ -54,7 +79,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return null;
+    return m_tarmac;
   }
 
   /**

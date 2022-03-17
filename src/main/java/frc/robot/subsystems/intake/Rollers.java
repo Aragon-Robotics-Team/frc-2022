@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Rollers extends SubsystemBase {
   public static final class Config {
     public static final int kRollerMotor = 0;
-    public static final double kVoltsFull = 12.0;
+    public static final double kSpeed = 0.75;
   }
 
   private CANSparkMax m_motor = new CANSparkMax(Config.kRollerMotor, MotorType.kBrushless);
@@ -25,12 +25,20 @@ public class Rollers extends SubsystemBase {
     m_motor.setIdleMode(IdleMode.kCoast);
   }
 
+  public InstantCommand getSetOn() {
+    return new InstantCommand(this::setOn, this);
+  }
+
+  public InstantCommand getSetOff() {
+    return new InstantCommand(this::setOff, this);
+  }
+
   public void setOn() {
-    m_motor.setVoltage(Config.kVoltsFull);
+    m_motor.set(Config.kSpeed);
   }
 
   public void setOff() {
-    m_motor.setVoltage(0);
+    m_motor.set(0.0);
   }
 
   @Override

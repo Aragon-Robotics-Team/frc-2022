@@ -7,6 +7,8 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -22,6 +24,13 @@ public class Drivetrain extends SubsystemBase {
     public static final double kWheelDiameter = 0.5;
     public static final double kTicksPerRotation = 2048.0;
     public static final double kGearRatio = 9.56;
+
+    public static final int kPCMId = 1;
+
+    public static final int kLeftGearLow = 6;
+    public static final int kLeftGearHigh = 1;
+    public static final int kRightGearLow = 7;
+    public static final int kRightGearHigh = 0;
   }
 
   private WPI_TalonFX m_rightMotorPrimary = new WPI_TalonFX(Config.kRightMotorPrimary);
@@ -30,6 +39,11 @@ public class Drivetrain extends SubsystemBase {
   private WPI_TalonFX m_leftMotorSecondary = new WPI_TalonFX(Config.kLeftMotorSecondary);
 
   private DifferentialDrive m_drive = new DifferentialDrive(m_rightMotorPrimary, m_leftMotorPrimary);
+
+  private DoubleSolenoid m_leftDogShifters = new DoubleSolenoid(Config.kPCMId, Config.kLeftGearHigh,
+      Config.kLeftGearLow);
+  private DoubleSolenoid m_rightDogShifters = new DoubleSolenoid(Config.kPCMId, Config.kRightGearHigh,
+      Config.kRightGearLow);
 
   /** Creates a new Drivetrain. */
   public Drivetrain() {
@@ -41,7 +55,9 @@ public class Drivetrain extends SubsystemBase {
     m_leftMotorPrimary.setInverted(true);
     m_leftMotorSecondary.setInverted(true);
 
-    SmartDashboard.putData("Reset Encoder", new InstantCommand(this::resetEncoder));
+    SmartDashboard.putData("Reset Encoder", new InstantCommand(this::resetEncoder, this));
+    SmartDashboard.putData("High Gear", getHighGear());
+    SmartDashboard.putData("Low Gear", getLowGear());
   }
 
   public DifferentialDrive getDrive() {
@@ -73,6 +89,24 @@ public class Drivetrain extends SubsystemBase {
     m_rightMotorSecondary.setNeutralMode(n);
     m_leftMotorPrimary.setNeutralMode(n);
     m_leftMotorSecondary.setNeutralMode(n);
+  }
+
+  public void highGear() {
+    m_leftDogShifters.set(Value.kForward);
+    m_rightDogShifters.set(Value.kForward);
+  }
+
+  public void lowGear() {
+    m_leftDogShifters.set(Value.kReverse);
+    m_rightDogShifters.set(Value.kReverse);
+  }
+
+  public InstantCommand getHighGear() {
+    return new InstantCommand(this::highGear, this);
+  }
+
+  public InstantCommand getLowGear() {
+    return new InstantCommand(this::lowGear, this);
   }
 
   @Override
