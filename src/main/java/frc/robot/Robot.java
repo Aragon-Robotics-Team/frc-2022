@@ -4,9 +4,11 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.slingshot.LEDServer;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -38,6 +40,9 @@ public class Robot extends TimedRobot {
     if (m_initCommand != null) {
       m_initCommand.schedule();
     }
+    CameraServer.startAutomaticCapture();
+
+    // LEDServer.getInstance().startServer(5801);
   }
 
   /**
@@ -48,6 +53,7 @@ public class Robot extends TimedRobot {
    * <p>
    * This runs after the mode specific periodic functions, but before LiveWindow
    * and SmartDashboard integrated updating.
+   * 
    */
   @Override
   public void robotPeriodic() {

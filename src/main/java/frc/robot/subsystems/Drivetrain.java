@@ -8,8 +8,8 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -17,10 +17,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Drivetrain extends SubsystemBase {
   private static final class Config {
-    public static final int kRightMotorPrimary = 1;
-    public static final int kRightMotorSecondary = 2;
-    public static final int kLeftMotorPrimary = 3;
-    public static final int kLeftMotorSecondary = 4;
+    public static final int kRightMotorPrimary = 2;
+    public static final int kRightMotorSecondary = 1;
+    public static final int kLeftMotorPrimary = 4;
+    public static final int kLeftMotorSecondary = 3;
 
     public static final double kWheelDiameter = 0.5;
     public static final double kTicksPerRotation = 2048.0;
@@ -30,8 +30,6 @@ public class Drivetrain extends SubsystemBase {
 
     public static final int kLeftGearLow = 6;
     public static final int kLeftGearHigh = 1;
-    public static final int kRightGearLow = 7;
-    public static final int kRightGearHigh = 0;
   }
 
   private WPI_TalonFX m_rightMotorPrimary = new WPI_TalonFX(Config.kRightMotorPrimary);
@@ -41,10 +39,9 @@ public class Drivetrain extends SubsystemBase {
 
   private DifferentialDrive m_drive = new DifferentialDrive(m_rightMotorPrimary, m_leftMotorPrimary);
 
-  private DoubleSolenoid m_leftDogShifters = new DoubleSolenoid(Config.kPCMId, PneumaticsModuleType.CTREPCM, Config.kLeftGearHigh,
+  private DoubleSolenoid m_dogShifters = new DoubleSolenoid(Config.kPCMId, PneumaticsModuleType.CTREPCM,
+      Config.kLeftGearHigh,
       Config.kLeftGearLow);
-  private DoubleSolenoid m_rightDogShifters = new DoubleSolenoid(Config.kPCMId, PneumaticsModuleType.CTREPCM, Config.kRightGearHigh,
-      Config.kRightGearLow);
 
   /** Creates a new Drivetrain. */
   public Drivetrain() {
@@ -53,8 +50,6 @@ public class Drivetrain extends SubsystemBase {
 
     m_rightMotorPrimary.setInverted(true);
     m_rightMotorSecondary.setInverted(true);
-    // m_leftMotorPrimary.setInverted(true);
-    // m_leftMotorSecondary.setInverted(true);
 
     SmartDashboard.putData("Reset Encoder", new InstantCommand(this::resetEncoder, this));
     SmartDashboard.putData("High Gear", getHighGear());
@@ -93,13 +88,11 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void highGear() {
-    m_leftDogShifters.set(Value.kForward);
-    m_rightDogShifters.set(Value.kForward);
+    m_dogShifters.set(Value.kForward);
   }
 
   public void lowGear() {
-    m_leftDogShifters.set(Value.kReverse);
-    m_rightDogShifters.set(Value.kReverse);
+    m_dogShifters.set(Value.kReverse);
   }
 
   public InstantCommand getHighGear() {

@@ -8,19 +8,24 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Rollers extends SubsystemBase {
   private static final class Config {
-    public static final int kRollerMotor = 0;
-    public static final double kSpeed = 0.75;
+    public static final int kRollerMotor = 1;
+    public static final double kSpeed = 0.6;
+    public static final int kArmChannel = 0;
   }
 
   private CANSparkMax m_motor = new CANSparkMax(Config.kRollerMotor, MotorType.kBrushless);
+  private Solenoid m_arms = new Solenoid(1, PneumaticsModuleType.CTREPCM, Config.kArmChannel);
 
   /** Creates a new Rollers. */
   public Rollers() {
+    m_motor.setInverted(true);
 
     m_motor.setIdleMode(IdleMode.kCoast);
   }
@@ -37,8 +42,32 @@ public class Rollers extends SubsystemBase {
     m_motor.set(Config.kSpeed);
   }
 
+  public boolean getState() {
+    return m_arms.get();
+  }
+
+  public void setReverse() {
+    m_motor.set(-Config.kSpeed);
+  }
+
   public void setOff() {
     m_motor.set(0.0);
+  }
+
+  public void armsIn() {
+    m_arms.set(false);
+  }
+
+  public void armsOut() {
+    m_arms.set(true);
+  }
+
+  public InstantCommand getArmsIn() {
+    return new InstantCommand(this::armsIn);
+  }
+
+  public InstantCommand getArmsOut() {
+    return new InstantCommand(this::armsOut);
   }
 
   @Override

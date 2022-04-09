@@ -4,57 +4,54 @@
 
 package frc.robot.commands.teleop.slingshot;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.subsystems.slingshot.Bowl;
+import frc.robot.subsystems.intake.Rollers;
+import frc.robot.subsystems.slingshot.Winch;
 
-public class PullSlingshot extends CommandBase {
-  private static final class Config {
-    public static final double kTicks = 0.0;
-    public static final double kMaxSpeed = 0.75;
-  }
-
-  private Bowl m_bowl;
-  private double m_speed;
+public class TestWinch extends CommandBase {
+  private Winch m_winch;
+  private Rollers m_rollers;
   private JoystickButton m_button;
+  private boolean m_stop;
 
-  /** Creates a new PullSlingshot. */
-  public PullSlingshot(Bowl bowl, JoystickButton button) {
-    m_bowl = bowl;
+  /** Creates a new TestWinch. */
+  public TestWinch(Winch winch, Rollers rollers, JoystickButton button) {
+    m_winch = winch;
     m_button = button;
-
-    addRequirements(bowl);
+    m_rollers = rollers;
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(winch, rollers);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    m_stop = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_button.get()) {
-      m_bowl.set(Config.kMaxSpeed);
+    if (!m_winch.isDown()) {
+      if (m_button.get()) {
+        m_winch.set(0.3);
+      } else {
+        m_winch.set(0.0);
+      }
     } else {
-      m_bowl.set(0.0);
+      m_winch.set(0.0);
     }
-    SmartDashboard.putBoolean("Bowl/pulling", true);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_bowl.set(0.0);
-    SmartDashboard.putBoolean("Bowl/pulling", false);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_bowl.getEncoderValue() >= Config.kTicks;
-    // return false;
-
+    return false;
   }
 }

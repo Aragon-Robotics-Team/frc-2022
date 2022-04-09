@@ -45,6 +45,7 @@ public class ArcadeDrive extends CommandBase {
 
     speed = Math.pow(speed, 3);
     turn = Math.pow(turn, 3);
+
     m_drivetrain.getDrive().arcadeDrive(speed, turn, false);
   }
 

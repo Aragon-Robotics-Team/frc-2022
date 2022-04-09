@@ -4,17 +4,19 @@
 
 package frc.robot.subsystems.slingshot;
 
-import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Latch extends SubsystemBase {
   private static final class Config {
-    public static final int kPWMPort = 9;
+    public static final int kChannel = 7;
   }
 
-  private Servo m_servo = new Servo(Config.kPWMPort);
+  private Solenoid m_solenoid = new Solenoid(1, PneumaticsModuleType.CTREPCM, Config.kChannel);
+  private boolean m_open = false;
 
   /** Creates a new Latch. */
   public Latch() {
@@ -29,15 +31,16 @@ public class Latch extends SubsystemBase {
   }
 
   public void openLatch() {
-    m_servo.set(0.0);
+    m_solenoid.set(true);
+    m_open = true;
   }
 
   public void closeLatch() {
-    m_servo.set(0.3);
+    m_solenoid.set(false);
   }
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Latch/servoValue", m_servo.getPosition());
+    SmartDashboard.putBoolean("Latch/open", m_open);
   }
 }
