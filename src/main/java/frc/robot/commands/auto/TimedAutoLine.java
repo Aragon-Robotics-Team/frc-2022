@@ -12,7 +12,7 @@ import frc.robot.subsystems.Drivetrain;
 
 public class TimedAutoLine extends CommandBase {
   private static final class Config {
-    public static final double kTime = 2;
+    public static final double kTime = 1.25;
     public static final double kSpeed = 0.3;
   }
 

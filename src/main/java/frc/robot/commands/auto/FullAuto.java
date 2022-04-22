@@ -4,8 +4,10 @@
 
 package frc.robot.commands.auto;
 
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.teleop.slingshot.AutoDelay;
+import frc.robot.commands.teleop.slingshot.AutoLatch;
 import frc.robot.commands.teleop.slingshot.AutoPull;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.slingshot.Latch;
@@ -19,8 +21,24 @@ public class FullAuto extends SequentialCommandGroup {
   public FullAuto(Winch bowl, Latch latch, Drivetrain drivetrain) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(latch.getCloseLatch(), new AutoPull(bowl, latch), latch.getOpenLatch(), new AutoDelay(0.5),
-        new TimedAutoLine(drivetrain));
+    // addCommands(latch.getCloseLatch(), new AutoPull(bowl, latch),
+    // latch.getOpenLatch(), new AutoDelay(0.5),
+    // new TimedAutoLine(drivetrain));
     // addCommands(new TimedAutoLine(drivetrain));
+    // addCommands(latch.getCloseLatch(), new AutoPull(bowl), latch.getOpenLatch(),
+    // new AutoDelay(0.5),
+    // new ParallelCommandGroup(new TimedAutoLine(drivetrain), new AutoLatch(bowl,
+    // latch)));
+    // addCommands(new TimedAutoLine(drivetrain));
+    // addCommands(new AutoLatch(bowl, latch), new AutoPull(bowl),
+    // latch.getOpenLatch());
+    // addCommands(new AutoLatch(bowl, latch));
+    // TESTING
+    // addCommands(new AutoLatch(bowl, latch), new AutoPull(bowl),
+    // latch.getOpenLatch(), new AutoDelay(0.25),
+    // new AutoLatch(bowl, latch));
+    // MAIN
+    addCommands(new AutoLatch(bowl, latch), new AutoPull(bowl), latch.getOpenLatch(), new AutoDelay(0.25),
+        new ParallelCommandGroup(new AutoLatch(bowl, latch), new TimedAutoLine(drivetrain)));
   }
 }

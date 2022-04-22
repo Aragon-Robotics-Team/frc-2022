@@ -11,9 +11,13 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.TestClimb;
 import frc.robot.commands.auto.FullAuto;
 import frc.robot.commands.teleop.ArcadeDrive;
+import frc.robot.commands.teleop.slingshot.AutoLatch;
+import frc.robot.commands.teleop.slingshot.AutoPull;
 import frc.robot.commands.teleop.slingshot.TestWinch;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Drivetrain;
@@ -53,6 +57,7 @@ public class RobotContainer {
   // Joysticks & Joystick Buttons
   private Joystick m_driveJoystick = new Joystick(Config.kDriveJoystickPort);
   private Joystick m_shootJoystick = new Joystick(Config.kShootJoystick);
+  private Joystick m_testJoystick = new Joystick(2);
 
   private JoystickButton m_highGear = new JoystickButton(m_driveJoystick, Config.kHighGearButton);
   private JoystickButton m_lowGear = new JoystickButton(m_driveJoystick, Config.kLowGearButton);
@@ -64,10 +69,16 @@ public class RobotContainer {
       Config.kArmDownButton);
   private JoystickButton m_feedInButton = new JoystickButton(m_shootJoystick, Config.kFeedInButton);
   private JoystickButton m_feedOutButton = new JoystickButton(m_shootJoystick, Config.kFeedOutButton);
+  private JoystickButton m_shootButton = new JoystickButton(m_shootJoystick, 8);
 
   private JoystickButton m_shooterUpButton = new JoystickButton(m_driveJoystick, Config.kShooterUpButton);
   private JoystickButton m_shooterDownButton = new JoystickButton(m_driveJoystick, Config.kShooterDownButton);
   private JoystickButton m_hopperButton = new JoystickButton(m_driveJoystick, 10);
+  private JoystickButton m_testWinchForward = new JoystickButton(m_testJoystick, 7);
+  private JoystickButton m_testWinchBackward = new JoystickButton(m_testJoystick, 8);
+  private JoystickButton m_testLatchOpen = new JoystickButton(m_testJoystick, 5);
+  private JoystickButton m_testLatchClosed = new JoystickButton(m_testJoystick, 6);
+  private JoystickButton m_downButton = new JoystickButton(m_shootJoystick, 7);
 
   // The robot's subsystems and commands are defined here...
   private Drivetrain m_drivetrain = new Drivetrain();
@@ -81,8 +92,8 @@ public class RobotContainer {
   private FullAuto m_fullAuto = new FullAuto(m_winch, m_latch, m_drivetrain);
 
   private Compressor m_compressor = new Compressor(1, PneumaticsModuleType.CTREPCM);
-  private TestWinch m_testWinch = new TestWinch(m_winch, m_rollers, m_shooterUpButton);
   private FeedIn m_feedIn = new FeedIn(m_rollers, m_hopper, m_feedInButton, m_feedOutButton);
+  private TestWinch m_testWinch = new TestWinch(m_winch, m_latch, m_testWinchForward, m_testWinchBackward);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -110,6 +121,10 @@ public class RobotContainer {
     // m_intakeButton.whenReleased(m_rollers.getSetOff());
     m_shooterDownButton.whenPressed(m_latch.getOpenLatch());
     m_hopperButton.whenPressed(m_latch.getCloseLatch());
+    m_testLatchOpen.whenPressed(m_latch.getOpenLatch());
+    m_testLatchClosed.whenPressed(m_latch.getCloseLatch());
+    m_downButton.whenPressed(new SequentialCommandGroup(new AutoLatch(m_winch, m_latch), new AutoPull(m_winch)));
+    m_shootButton.whenPressed(m_latch.getOpenLatch());
   }
 
   public Command getInitCommand() {
@@ -127,6 +142,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
+    m_drivetrain.highGear();
     m_winch.resetEncoder();
     return m_fullAuto;
   }
@@ -138,8 +154,9 @@ public class RobotContainer {
    */
   public Command getTeleopCommand() {
     m_drivetrain.setDefaultCommand(m_arcadeDrive);
+    m_drivetrain.highGear();
     m_feedIn.schedule();
 
-    return null;
+    return new TestClimb();
   }
 }

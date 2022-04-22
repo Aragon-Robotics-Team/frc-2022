@@ -16,8 +16,8 @@ import frc.robot.subsystems.slingshot.Latch;
  */
 public class AutoLatch extends CommandBase {
   private static final class Config {
-    public static final double kTicks = -215.0;
-    public static final double kSpeed = 1.0;
+    public static final double kTicks = -500;
+    public static final double kSpeed = 0.3;
   }
 
   private Winch m_bowl;
@@ -42,7 +42,7 @@ public class AutoLatch extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_bowl.set(-Config.kSpeed);
+    m_bowl.up();
   }
 
   // Called once the command ends or is interrupted.
@@ -54,6 +54,6 @@ public class AutoLatch extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_bowl.getEncoderValue() <= Config.kTicks;
+    return m_bowl.isUp();
   }
 }

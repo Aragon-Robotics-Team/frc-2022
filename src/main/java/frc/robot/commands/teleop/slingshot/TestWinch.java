@@ -7,21 +7,24 @@ package frc.robot.commands.teleop.slingshot;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.intake.Rollers;
+import frc.robot.subsystems.slingshot.Latch;
 import frc.robot.subsystems.slingshot.Winch;
 
 public class TestWinch extends CommandBase {
   private Winch m_winch;
-  private Rollers m_rollers;
-  private JoystickButton m_button;
+  private Latch m_latch;
+  private JoystickButton m_forward;
+  private JoystickButton m_back;
   private boolean m_stop;
 
   /** Creates a new TestWinch. */
-  public TestWinch(Winch winch, Rollers rollers, JoystickButton button) {
+  public TestWinch(Winch winch, Latch latch, JoystickButton forward, JoystickButton backward) {
     m_winch = winch;
-    m_button = button;
-    m_rollers = rollers;
+    m_latch = latch;
+    m_forward = forward;
+    m_back = backward;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(winch, rollers);
+    addRequirements(winch, latch);
   }
 
   // Called when the command is initially scheduled.
@@ -33,12 +36,16 @@ public class TestWinch extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (!m_winch.isDown()) {
-      if (m_button.get()) {
-        m_winch.set(0.3);
-      } else {
+    double speed = 0.3;
+    if (m_forward.get()) {
+      if (m_winch.isUp()) {
         m_winch.set(0.0);
+        m_winch.resetEncoder();
+      } else {
+        m_winch.set(speed);
       }
+    } else if (m_back.get()) {
+      m_winch.set(-speed);
     } else {
       m_winch.set(0.0);
     }

@@ -13,21 +13,21 @@ import frc.robot.subsystems.slingshot.Latch;
 
 public class AutoPull extends CommandBase {
   private Winch m_winch;
-  private Latch m_latch;
 
   /**
    * Creates a new AutoPull.
    */
-  public AutoPull(Winch winch, Latch latch) {
+  public AutoPull(Winch winch) {
     m_winch = winch;
 
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(winch, latch);
+    addRequirements(winch);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    m_winch.resetEncoder();
   }
 
   // Called every time the scheduler runs while the command is scheduled.

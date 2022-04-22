@@ -18,8 +18,8 @@ public class Winch extends SubsystemBase {
   private static final class Config {
     public final static int kMotorPort = 7;
     public final static double kBottomLimit = 0.0; // TODO
-    public final static double kSpeed = 0.3; // TODO
-    public final static int kLimitSwtichChannel = 7;
+    public final static double kSpeed = 0.4; // TODO
+    public final static int kLimitSwtichChannel = 8;
   }
 
   private CANSparkMax m_motor = new CANSparkMax(Config.kMotorPort, MotorType.kBrushless);
@@ -40,11 +40,19 @@ public class Winch extends SubsystemBase {
   }
 
   public void pull() {
+    m_motor.set(-Config.kSpeed);
+  }
+
+  public void up() {
     m_motor.set(Config.kSpeed);
   }
 
+  public boolean isUp() {
+    return !m_limitSwitch.get();
+  }
+
   public boolean isDown() {
-    return m_limitSwitch.get();
+    return getEncoderValue() <= -500.0; // TODO;
   }
 
   public double getEncoderValue() {
@@ -71,6 +79,6 @@ public class Winch extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Winch/encoderValue", getEncoderValue());
-    SmartDashboard.putBoolean("Winch/swtich", isDown());
+    SmartDashboard.putBoolean("Winch/switch", m_limitSwitch.get());
   }
 }
