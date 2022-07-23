@@ -35,12 +35,12 @@ public class Latch extends SubsystemBase {
 
   public void openLatch() {
     m_servo.set(0.0);
-    m_open = true;
+    m_open = false;
   }
 
   public void closeLatch() {
     m_servo.set(0.7);
-    m_open = false;
+    m_open = true;
   }
 
   @Override

@@ -25,7 +25,7 @@ public class Rollers extends SubsystemBase {
 
   /** Creates a new Rollers. */
   public Rollers() {
-    m_motor.setInverted(true);
+    m_motor.setInverted(false);
 
     m_motor.setIdleMode(IdleMode.kCoast);
   }
@@ -39,7 +39,7 @@ public class Rollers extends SubsystemBase {
   }
 
   public void setOn() {
-    m_motor.set(Config.kSpeed);
+    m_motor.set(-Config.kSpeed);
   }
 
   public boolean getState() {

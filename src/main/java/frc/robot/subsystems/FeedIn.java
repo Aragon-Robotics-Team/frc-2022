@@ -46,6 +46,8 @@ public class FeedIn extends CommandBase {
         m_hopper.setOff();
       }
     } else {
+      m_rollers.setOff();
+
       if (m_inButton.get()) {
         m_hopper.setOn();
       } else if (m_outButton.get()) {
